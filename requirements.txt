@@ -1,0 +1,5 @@
+jsonschema==2.3.0
+requests==2.2.1
+
+# Required for validating fields with a format of date-time
+strict-rfc3339==0.4
