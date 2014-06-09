@@ -1,12 +1,8 @@
 {
+  "$schema": "http://json-schema.org/schema#",
   "title": "Monitoring Data",
   "type": "object",
   "properties": {
-    "_timestamp": {
-      "description": "An RFC3339 formatted date time, the API actually requies ISO8601 but the differences are minimal. RFC3339 is more explicit, maybe we should switch?",
-      "type": "string",
-      "format": "date-time"
-    },
     "check": {
       "type": "string"
     },
@@ -29,5 +25,6 @@
       "maximum": 3600
     }
   },
-  "required": ["_timestamp", "check", "downtime", "unmonitored", "uptime"]
+  "required": ["check", "downtime", "unmonitored", "uptime"],
+  "additionalFields": false
 }

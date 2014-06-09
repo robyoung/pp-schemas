@@ -3,3 +3,5 @@ requests==2.2.1
 
 # Required for validating fields with a format of date-time
 strict-rfc3339==0.4
+
+docopt==0.6.1
