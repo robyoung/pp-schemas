@@ -1,7 +1,7 @@
 {
   "title": "Realtime Google Analytics Data",
   "type": "object",
-  "propertis": {
+  "properties": {
     "_timestamp": {
       "description": "An RFC3339 formatted date time, the API actually requies ISO8601 but the differences are minimal. RFC3339 is more explicit, maybe we should switch?",
       "type": "string",
