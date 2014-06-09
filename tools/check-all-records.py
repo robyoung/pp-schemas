@@ -51,16 +51,24 @@ def data_set_schema_path(data_group, data_type, schema_path):
 def load_schema(data_group, data_type, schema_path=None):
     if schema_path is None:
         schema_path = calculate_schema_path()
-    root_schema = load_json_schema(os.path.join(schema_path, 'root.json'))
-    all_of = [root_schema]
+    schema = {
+        "description": "Combined schema for a data-set",
+        "definitions": {
+            "root": load_json_schema(os.path.join(schema_path, 'root.json')),
+        },
+        "allOf": [ {"$ref": "#/definitions/root"} ]
+    }
     try:
-        all_of.append(load_json_schema(data_type_schema_path(data_type, schema_path)))
-        all_of.append(load_json_schema(data_set_schema_path(data_group, data_type, schema_path)))
+        schema['definitions']['data-type'] = load_json_schema(
+            data_type_schema_path(data_type, schema_path))
+        schema['allOf'].append({"$ref": "#/definitions/data-type"})
+
+        schema['definitions']['data-set'] = load_json_schema(
+            data_set_schema_path(data_group, data_type, schema_path))
+        schema['allOf'].append({"$ref": "#/definitions/data-set"})
     except IOError:
         pass
-    return {
-        "allOf": all_of
-    }
+    return schema
 
 
 def load_records(data_group, data_type):
