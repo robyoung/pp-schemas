@@ -1,7 +1,7 @@
 """
 
 Usage:
-    check-all-documents.py <data_set_url> <data_type> [--schema-path=<schema_path>]
+    check-all-documents.py <data_group> <data_type> [--schema-path=<schema_path>]
 
 Options:
     -h --help                   Show this screen
@@ -40,21 +40,31 @@ def calculate_schema_path():
         os.path.join(os.path.dirname(__file__), '..', 'schemas'))
 
 
-def load_schema(data_type, schema_path=None):
+def data_type_schema_path(data_type, schema_path):
+    return os.path.join(schema_path, 'data-types', '{}.json'.format(data_type))
+
+
+def data_set_schema_path(data_group, data_type, schema_path):
+    return os.path.join(schema_path, 'data-sets', data_group, '{}.json'.format(data_type))
+
+
+def load_schema(data_group, data_type, schema_path=None):
     if schema_path is None:
         schema_path = calculate_schema_path()
     root_schema = load_json_schema(os.path.join(schema_path, 'root.json'))
-    type_schema = load_json_schema(os.path.join(schema_path, 'data-types',
-                                                '{}.json'.format(data_type)))
+    all_of = [root_schema]
+    try:
+        all_of.append(load_json_schema(data_type_schema_path(data_type, schema_path)))
+        all_of.append(load_json_schema(data_set_schema_path(data_group, data_type, schema_path)))
+    except IOError:
+        pass
     return {
-        "allOf": [
-            root_schema,
-            type_schema,
-        ]
+        "allOf": all_of
     }
 
 
-def load_records(url):
+def load_records(data_group, data_type):
+    url = 'https://www.performance.service.gov.uk/data/{}/{}'.format(data_group, data_type)
     data = requests.get(url).json().get('data', [])
     records = []
     for i, record in enumerate(data):
@@ -69,11 +79,13 @@ def load_records(url):
 
 def main():
     arguments = docopt(__doc__)
+    print('data group: {}'.format(arguments['<data_group>']))
+    print('data type: {}'.format(arguments['<data_type>']))
 
     print('Loading schema')
-    schema = load_schema(arguments['<data_type>'], arguments['--schema-path'])
+    schema = load_schema(arguments['<data_group>'], arguments['<data_type>'], arguments['--schema-path'])
     print('Loading records')
-    records = load_records(arguments['<data_set_url>'])
+    records = load_records(arguments['<data_group>'], arguments['<data_type>'])
 
     print('Validating first 1000')
     start = datetime.now()

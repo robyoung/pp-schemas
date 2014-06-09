@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Carer's allowance Journey data",
+  "type": "object",
+  "properties": {
+    "eventLabel": {
+      "description": "GA event label dimension",
+      "type": "string"
+    },
+    "eventAction": {
+      "description": "GA event action dimension",
+      "type": "string",
+      "enum": ["page"]
+    }
+  },
+  "required": ["eventAction", "eventLabel"]
+}

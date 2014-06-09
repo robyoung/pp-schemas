@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Journey data",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "description": "Unique identifier for the record",
+      "type": "string"
+    },
+    "humanId": {
+      "description": "Human readable representation of the unique identifier",
+      "type": "string"
+    },
+    "timeSpan": {
+      "description": "The time period being described",
+      "type": "string",
+      "enum": ["week"]
+    },
+    "dataType": {
+      "description": "A useless field that gives no extra value",
+      "type": "string"
+    },
+    "eventCategory": {
+      "description": "GA event category dimension",
+      "type": "string"
+    },
+    "uniqueEvents": {
+      "description": "GA unique events metric",
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": ["_id", "humanId", "timeSpan", "dataType", "eventCategory", "uniqueEvents"]
+}
