@@ -2,4 +2,4 @@
 #
 # Check all journey data sets against the schema
 
-cat datasets.txt | xargs -I '{}' python tools/check-all-documents.py {} journey
+cat datasets.txt | xargs -I '{}' python tools/check-all-records.py {} journey

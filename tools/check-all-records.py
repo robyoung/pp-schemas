@@ -1,7 +1,7 @@
 """
 
 Usage:
-    check-all-documents.py <data_group> <data_type> [--schema-path=<schema_path>]
+    check-all-records.py <data_group> <data_type> [--schema-path=<schema_path>]
 
 Options:
     -h --help                   Show this screen
